@@ -16,6 +16,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN ln -sf /usr/bin/python3 /usr/bin/python
 
+# Playwright system dependencies (Chromium)
+RUN npx playwright install-deps chromium
+
 # Claude Code CLI
 RUN npm install -g @anthropic-ai/claude-code
 
@@ -31,6 +34,9 @@ RUN python3 -m venv /opt/venv && /opt/venv/bin/pip install --upgrade pip
 COPY requirements.txt .
 RUN /opt/venv/bin/pip install --no-cache-dir --force-reinstall agent_tooling
 RUN /opt/venv/bin/pip install --no-cache-dir --force-reinstall -r requirements.txt
+
+# Download Chromium binary for Playwright
+RUN /opt/venv/bin/python -m playwright install chromium
 
 # Pre-download spaCy model (Kokoro/misaki needs it; can't pip-install at runtime as non-root)
 RUN /opt/venv/bin/python -m spacy download en_core_web_sm

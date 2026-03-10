@@ -77,3 +77,16 @@ def _mock_third_party_modules(monkeypatch):
     keyring_mock = _create_mock_module("keyring")
     keyring_mock.get_password = MagicMock(return_value=None)
     monkeypatch.setitem(sys.modules, "keyring", keyring_mock)
+
+    # --- Playwright mocks ---
+    playwright_mock = _create_mock_module("playwright")
+    playwright_sync_mock = _create_mock_module("playwright.sync_api")
+    playwright_sync_mock.sync_playwright = MagicMock()
+    playwright_sync_mock.Browser = MagicMock()
+    playwright_sync_mock.BrowserContext = MagicMock()
+    playwright_sync_mock.Page = MagicMock()
+    playwright_sync_mock.Playwright = MagicMock()
+    playwright_sync_mock.TimeoutError = TimeoutError
+
+    monkeypatch.setitem(sys.modules, "playwright", playwright_mock)
+    monkeypatch.setitem(sys.modules, "playwright.sync_api", playwright_sync_mock)
