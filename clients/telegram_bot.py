@@ -741,7 +741,9 @@ def _get_bot_token() -> str:
 async def _on_startup(app) -> None:
     global http, gateway
     http = aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=0, sock_read=0))
-    gateway = GatewayClient(http, SERVER_URL, "telegram", surface_prompt=TELEGRAM_SURFACE_PROMPT)
+    mind_id = os.getenv("MIND_ID", "")
+    surface_name = f"telegram:{mind_id}" if mind_id else "telegram"
+    gateway = GatewayClient(http, SERVER_URL, surface_name, surface_prompt=TELEGRAM_SURFACE_PROMPT)
     log.info(
         "Hive Mind Telegram bot started (gateway=%s, voice=%s)",
         SERVER_URL,
