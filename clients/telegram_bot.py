@@ -749,7 +749,7 @@ async def _on_startup(app) -> None:
     token_key = os.getenv("TELEGRAM_BOT_TOKEN_KEYRING_KEY", "default")
     suffix = mind_id if mind_id else token_key
     surface_name = f"telegram:{suffix}"
-    gateway = GatewayClient(http, SERVER_URL, surface_name, surface_prompt=TELEGRAM_SURFACE_PROMPT)
+    gateway = GatewayClient(http, SERVER_URL, surface_name, surface_prompt=TELEGRAM_SURFACE_PROMPT, mind_id=mind_id or "ada")
     log.info(
         "Hive Mind Telegram bot started (gateway=%s, voice=%s)",
         SERVER_URL,
