@@ -741,8 +741,14 @@ def _get_bot_token() -> str:
 async def _on_startup(app) -> None:
     global http, gateway
     http = aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=0, sock_read=0))
+    # Namespace the session client_type so two telegram bots with the same
+    # authorized user don't share a session (private DM chat_id == user_id).
+    # MIND_ID takes priority; fall back to TELEGRAM_BOT_TOKEN_KEYRING_KEY (already
+    # distinct per bot in docker-compose) so no extra env vars are needed.
     mind_id = os.getenv("MIND_ID", "")
-    surface_name = f"telegram:{mind_id}" if mind_id else "telegram"
+    token_key = os.getenv("TELEGRAM_BOT_TOKEN_KEYRING_KEY", "default")
+    suffix = mind_id if mind_id else token_key
+    surface_name = f"telegram:{suffix}"
     gateway = GatewayClient(http, SERVER_URL, surface_name, surface_prompt=TELEGRAM_SURFACE_PROMPT)
     log.info(
         "Hive Mind Telegram bot started (gateway=%s, voice=%s)",
