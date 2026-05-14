@@ -214,7 +214,7 @@ def _fetch_soul() -> str | None:
         import requests
         r = requests.post(
             f"{NS_URL}/kg/query",  # OR direct call to lucent — match the existing approach
-            json={"entity_name": NAME.capitalize(), "agent_id": MIND_ID, "depth": 1},
+            json={"entity_name": NAME.capitalize(), "mind_id": MIND_ID, "depth": 1},
             timeout=5,
         )
         if r.status_code != 200:
