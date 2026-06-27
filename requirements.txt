@@ -50,3 +50,6 @@ apscheduler>=3.10
 # Remote Admin SSH bridge
 paramiko>=3.0
 
+# PDF generation
+weasyprint
+
